@@ -3,11 +3,29 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, MenuProps } from "antd";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const MainLayout = () => {
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      icon: <UserOutlined />,
+      label: "Dashboard",
+    },
+    {
+      key: "2",
+      icon: <VideoCameraOutlined />,
+      label: "Profile",
+    },
+    {
+      key: "3",
+      icon: <UploadOutlined />,
+      label: "User Management",
+    },
+  ];
+
   return (
     <Layout className="h-[100vh]">
       <Sider
@@ -19,28 +37,14 @@ const MainLayout = () => {
         onCollapse={(collapsed, type) => {
           console.log(collapsed, type);
         }}>
-        <div className="demo-logo-vertical" />
+        <div className=" text-white font-semibold text-xl flex items-center justify-center h-14">
+          PH-University
+        </div>
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["4"]}
-          items={[
-            {
-              key: "1",
-              icon: <UserOutlined />,
-              label: "nav 1",
-            },
-            {
-              key: "2",
-              icon: <VideoCameraOutlined />,
-              label: "nav 2",
-            },
-            {
-              key: "3",
-              icon: <UploadOutlined />,
-              label: "nav 3",
-            },
-          ]}
+          defaultSelectedKeys={["1"]}
+          items={items}
         />
       </Sider>
       <Layout>
