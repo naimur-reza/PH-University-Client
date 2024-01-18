@@ -1,31 +1,10 @@
-import {
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
-import { Layout, Menu, MenuProps } from "antd";
+import { Layout, Menu } from "antd";
+import { Outlet } from "react-router-dom";
+import { sidebarOptions } from "../../routes/admin.routes";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const MainLayout = () => {
-  const items: MenuProps["items"] = [
-    {
-      key: "1",
-      icon: <UserOutlined />,
-      label: "Dashboard",
-    },
-    {
-      key: "2",
-      icon: <VideoCameraOutlined />,
-      label: "Profile",
-    },
-    {
-      key: "3",
-      icon: <UploadOutlined />,
-      label: "User Management",
-    },
-  ];
-
   return (
     <Layout className="h-[100vh]">
       <Sider
@@ -43,8 +22,8 @@ const MainLayout = () => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={["1"]}
-          items={items}
+          // defaultSelectedKeys={["1"]}
+          items={sidebarOptions}
         />
       </Sider>
       <Layout>
@@ -55,7 +34,7 @@ const MainLayout = () => {
               padding: 24,
               minHeight: 360,
             }}>
-            content
+            <Outlet />
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
