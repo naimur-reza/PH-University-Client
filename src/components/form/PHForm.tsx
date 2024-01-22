@@ -1,6 +1,13 @@
+import { ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-const PHForm = ({ onSubmit, children }) => {
+const PHForm = ({
+  onSubmit,
+  children,
+}: {
+  onSubmit: any;
+  children: ReactNode;
+}) => {
   const methods = useForm();
 
   return (

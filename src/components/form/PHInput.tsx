@@ -1,12 +1,24 @@
 import { Input } from "antd";
 import { Controller } from "react-hook-form";
 
-const PHInput = ({ type, name }: { type: string; name: string }) => {
+type TItems = {
+  type: string;
+  name: string;
+  placeholder: string;
+  label: string;
+};
+
+const PHInput = ({ type, name, placeholder, label }: TItems) => {
   return (
-    <Controller
-      name={name}
-      render={({ field }) => <Input {...field} type={type} id={name} />}
-    />
+    <div className="mb-5">
+      {label && label}
+      <Controller
+        name={name}
+        render={({ field }) => (
+          <Input placeholder={placeholder} {...field} type={type} id={name} />
+        )}
+      />
+    </div>
   );
 };
 
