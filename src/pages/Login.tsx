@@ -41,9 +41,14 @@ const Login = () => {
     }
   };
 
+  const defaultValues = {
+    userId: "A-0001",
+    password: "admin123",
+  };
+
   return (
     <Row justify="center" align="middle" style={{ height: "100vh" }}>
-      <PHForm onSubmit={onSubmit}>
+      <PHForm onSubmit={onSubmit} defaultValues={defaultValues}>
         <PHInput label="Id" placeholder="user id" name="userId" type="text" />
 
         <PHInput

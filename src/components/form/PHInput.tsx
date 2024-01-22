@@ -15,7 +15,13 @@ const PHInput = ({ type, name, placeholder, label }: TItems) => {
       <Controller
         name={name}
         render={({ field }) => (
-          <Input placeholder={placeholder} {...field} type={type} id={name} />
+          <Input
+            required
+            placeholder={placeholder}
+            {...field}
+            type={type}
+            id={name}
+          />
         )}
       />
     </div>
