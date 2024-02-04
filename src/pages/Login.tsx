@@ -36,8 +36,14 @@ const Login = () => {
 
       navigate(`/${user.role}/dashboard`);
       toast.success(res.message, { duration: 2500 });
-    } catch (error) {
-      toast.error("Something went wrong!", { duration: 3000 });
+    } catch (error: any) {
+      // toast.error("Something went wrong!", { duration: 3000 });
+      if (error.status === 404) {
+        toast.error("User not found", { duration: 3000 });
+      }
+      if (error.status === 403) {
+        toast.error("Invalid credentials", { duration: 3000 });
+      }
     }
   };
 
