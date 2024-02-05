@@ -6,19 +6,30 @@ import { monthOptions, yearOptions } from "../../../constants/global";
 import { semesters } from "../../../constants/semester";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { semesterValidationSchema } from "../../../schemas/academicManagement.schema";
+import { useAddAcademicSemesterMutation } from "../../../redux/features/admin/academicManagement.api";
+import { toast } from "sonner";
 
 const CreateAcademicSemester = () => {
-  const onsubmit = (data: FieldValues) => {
+  const [addSemester, { isLoading }] = useAddAcademicSemesterMutation();
+
+  const onsubmit = async (data: FieldValues) => {
     const name = semesters[Number(data.name) - 1].label;
     const semesterData = {
       name,
       code: data.name,
-      startYear: data.year,
+      year: data.year,
       endYear: data.year,
       startMonth: data.startMonth,
       endMonth: data.endMonth,
     };
-    console.log(semesterData);
+
+    try {
+      const semester = await addSemester(semesterData).unwrap();
+      if (semester.success) toast.success(semester.message);
+    } catch (error: any) {
+      if (error?.data.message) toast.error(error.data.message);
+      else toast.error("An error occurred");
+    }
   };
 
   return (
@@ -36,7 +47,9 @@ const CreateAcademicSemester = () => {
           />
           <PHSelect label="End-month" name="endMonth" options={monthOptions} />
 
-          <Button htmlType="submit">Submit</Button>
+          <Button htmlType="submit" loading={isLoading}>
+            Submit
+          </Button>
         </PHForm>
       </Col>
     </Flex>
