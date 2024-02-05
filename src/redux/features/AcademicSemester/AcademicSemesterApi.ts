@@ -8,6 +8,12 @@ export const academicSemesterApi = baseApi.injectEndpoints({
         method: "GET",
         body: userInfo,
       }),
+      transformResponse: (response: any) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
     }),
   }),
 });
