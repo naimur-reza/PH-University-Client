@@ -13,7 +13,7 @@ const PHSelect = ({ label, options, name }: TPHSelectProps) => {
       name={name}
       render={({ field }) => (
         <Form.Item label={label}>
-          <Select defaultValue="lucy" {...field} options={options} />
+          <Select {...field} options={options} size="large" />
         </Form.Item>
       )}
     />

@@ -21,6 +21,7 @@ const PHInput = ({ type, name, placeholder, label }: TItems) => {
               {...field}
               type={type}
               id={name}
+              size="large"
             />
           </Form.Item>
         )}
