@@ -34,14 +34,9 @@ const Sidebar = () => {
   }
   return (
     <Sider
+      style={{ height: "100vh", position: "sticky", top: "0", left: "0" }}
       breakpoint="lg"
-      collapsedWidth="0"
-      onBreakpoint={(broken) => {
-        console.log(broken);
-      }}
-      onCollapse={(collapsed, type) => {
-        console.log(collapsed, type);
-      }}>
+      collapsedWidth="0">
       <div className=" text-white font-semibold text-xl flex items-center justify-center h-14">
         PH-University
       </div>
