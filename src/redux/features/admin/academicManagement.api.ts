@@ -1,12 +1,31 @@
+import { TQueryParam, TResponseRedux } from "../../../types";
+import { TSemester } from "../../../types/academicSemester.type";
 import { baseApi } from "../../api/baseApi";
 
 const academicManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllSemesters: builder.query({
-      query: () => ({
-        url: "/academic-semesters",
-        method: "GET",
-      }),
+      query: (args) => {
+        const params = new URLSearchParams();
+
+        if (args) {
+          args.forEach((item: TQueryParam) => {
+            params.append(item.name, item.value as string);
+          });
+        }
+
+        return {
+          url: "/academic-semesters",
+          method: "GET",
+          params,
+        };
+      },
+      transformResponse: (response: TResponseRedux<TSemester[]>) => {
+        return {
+          data: response.data,
+          meta: response.meta,
+        };
+      },
     }),
     addAcademicSemester: builder.mutation({
       query: (data) => ({

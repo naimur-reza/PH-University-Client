@@ -1,20 +1,25 @@
-import { useGetAllAcademicSemesterQuery } from "../../../redux/features/AcademicSemester/AcademicSemesterApi";
 import { Table } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
 import { TSemester } from "../../../types/academicSemester.type";
+import { useState } from "react";
+import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement.api";
+import { TQueryParam } from "../../../types";
 
 export type TTableData = Pick<
   TSemester,
-  "_id" | "name" | "year" | "startMonth" | "endMonth"
+  "name" | "year" | "startMonth" | "endMonth"
 >;
 
 const AcademicSemester = () => {
-  const { data: semesterData } = useGetAllAcademicSemesterQuery(undefined);
+  const [params, setParams] = useState<TQueryParam[]>([]);
+
+  const { data: semesterData, isFetching } = useGetAllSemestersQuery(params);
 
   const tableData = semesterData?.data.map(
     ({ _id, name, startMonth, endMonth, year }) => {
       return {
-        _id,
+        key: _id,
+
         name,
         startMonth,
         endMonth,
@@ -29,8 +34,16 @@ const AcademicSemester = () => {
       dataIndex: "name",
       filters: [
         {
-          text: "Joe",
-          value: "Joe",
+          text: "Autumn",
+          value: "Autumn",
+        },
+        {
+          text: "Summer",
+          value: "Summer",
+        },
+        {
+          text: "Fall",
+          value: "Fall",
         },
       ],
     },
@@ -54,12 +67,23 @@ const AcademicSemester = () => {
     sorter,
     extra
   ) => {
-    console.log("params", pagination, filters, sorter, extra);
+    const queryParams: TQueryParam[] = [];
+    filters.name?.forEach((name) => {
+      queryParams.push({ name: "name", value: name });
+    });
+    setParams(queryParams);
+    console.log(pagination, filters, sorter, extra);
+    console.log(queryParams);
   };
 
   return (
     <div>
-      <Table columns={columns} dataSource={tableData} onChange={onChange} />
+      <Table
+        loading={isFetching}
+        columns={columns}
+        dataSource={tableData}
+        onChange={onChange}
+      />
     </div>
   );
 };
