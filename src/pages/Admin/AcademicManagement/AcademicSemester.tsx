@@ -19,7 +19,6 @@ const AcademicSemester = () => {
     ({ _id, name, startMonth, endMonth, year }) => {
       return {
         key: _id,
-
         name,
         startMonth,
         endMonth,
@@ -50,6 +49,20 @@ const AcademicSemester = () => {
     {
       title: "Year",
       dataIndex: "year",
+      filters: [
+        {
+          text: "2024",
+          value: "2024",
+        },
+        {
+          text: "2025",
+          value: "2025",
+        },
+        {
+          text: "2026",
+          value: "2026",
+        },
+      ],
     },
     {
       title: "Start Month",
@@ -71,6 +84,11 @@ const AcademicSemester = () => {
     filters.name?.forEach((name) => {
       queryParams.push({ name: "name", value: name });
     });
+
+    filters.year?.forEach((year) => {
+      queryParams.push({ name: "year", value: year });
+    });
+
     setParams(queryParams);
     console.log(pagination, filters, sorter, extra);
     console.log(queryParams);

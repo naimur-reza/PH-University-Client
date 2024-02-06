@@ -1,13 +1,13 @@
-import AcademicDepartment from "../pages/Admin/AcademicManagement/AcademicDepartment";
-import AcademicFaculty from "../pages/Admin/AcademicManagement/AcademicFaculty";
-import AcademicSemester from "../pages/Admin/AcademicManagement/AcademicSemester";
-import CreateAcademicDepartment from "../pages/Admin/AcademicManagement/CreateAcademicDepartment";
-import CreateAcademicFaculty from "../pages/Admin/AcademicManagement/CreateAcademicFaculty";
-import CreateAcademicSemester from "../pages/Admin/AcademicManagement/CreateAcademicSemester";
+import AcademicDepartment from "../pages/Admin/academicManagement/AcademicDepartment";
+import AcademicFaculty from "../pages/Admin/academicManagement/AcademicFaculty";
+import AcademicSemester from "../pages/Admin/academicManagement/AcademicSemester";
+import CreateAcademicDepartment from "../pages/Admin/academicManagement/CreateAcademicDepartment";
+import CreateAcademicFaculty from "../pages/Admin/academicManagement/CreateAcademicFaculty";
+import CreateAcademicSemester from "../pages/Admin/academicManagement/CreateAcademicSemester";
 import AdminDashboard from "../pages/Admin/AdminDashboard";
-import CreateAdmin from "../pages/Admin/CreateAdmin";
-import CreateFaculty from "../pages/Admin/CreateFaculty";
-import CreateStudent from "../pages/Admin/CreateStudent";
+import CreateAdmin from "../pages/Admin/userManagement/CreateAdmin";
+import CreateFaculty from "../pages/Admin/userManagement/CreateFaculty";
+import CreateStudent from "../pages/Admin/userManagement/CreateStudent";
 
 export const adminPaths = [
   {
