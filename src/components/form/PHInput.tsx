@@ -4,7 +4,7 @@ import { Controller } from "react-hook-form";
 type TItems = {
   type: string;
   name: string;
-  placeholder: string;
+  placeholder?: string;
   label: string;
 };
 
@@ -16,7 +16,6 @@ const PHInput = ({ type, name, placeholder, label }: TItems) => {
         render={({ field }) => (
           <Form.Item label={label}>
             <Input
-              required
               placeholder={placeholder}
               {...field}
               type={type}
