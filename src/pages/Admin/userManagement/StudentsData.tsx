@@ -5,12 +5,22 @@ import {
   Table,
   TableColumnsType,
   TableProps,
+  Tooltip,
 } from "antd";
 import { useGetAllStudentsQuery } from "../../../redux/features/admin/userManagement.api";
 import { TQueryParam, TStudent } from "../../../types";
 import { useState } from "react";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  ZoomInOutlined,
+} from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
-export type TTableData = Pick<TStudent, "gender" | "id" | "fullName">;
+export type TTableData = Pick<
+  TStudent,
+  "gender" | "id" | "fullName" | "email" | "contactNo"
+>;
 
 const StudentsData = () => {
   const [page, setPage] = useState(1);
@@ -35,14 +45,18 @@ const StudentsData = () => {
 
   const metaData = sData?.meta;
 
-  const tableData = sData?.data.map(({ _id, fullName, gender, id }) => {
-    return {
-      key: _id,
-      fullName,
-      gender,
-      id,
-    };
-  });
+  const tableData = sData?.data.map(
+    ({ _id, fullName, gender, id, email, contactNo }) => {
+      return {
+        key: _id,
+        fullName,
+        gender,
+        id,
+        email,
+        contactNo,
+      };
+    }
+  );
 
   const columns: TableColumnsType<TTableData> = [
     {
@@ -55,24 +69,44 @@ const StudentsData = () => {
         },
       ],
     },
-    {
-      title: "Gender",
-      dataIndex: "gender",
-    },
+
     {
       title: "Roll",
       dataIndex: "id",
     },
     {
+      title: "Email",
+      dataIndex: "email",
+    },
+    {
+      title: "Gender",
+      dataIndex: "gender",
+    },
+    {
+      title: "Contact No",
+      dataIndex: "contactNo",
+    },
+    {
       title: "Actions",
-      render: () => (
-        <Space>
-          <Button>Edit</Button>
-          <Button>Details</Button>
-          <Button type="primary" danger>
-            Delete
-          </Button>
-        </Space>
+      render: (item) => (
+        console.log(item),
+        (
+          <Space>
+            <Tooltip title="Edit">
+              <Link to={`/admin/student-data/${item.key}`}>
+                <Button icon={<EditOutlined />} />
+              </Link>
+            </Tooltip>
+
+            <Tooltip title="View">
+              <Button icon={<ZoomInOutlined />} />
+            </Tooltip>
+
+            <Tooltip title="Delete">
+              <Button icon={<DeleteOutlined />} danger />
+            </Tooltip>
+          </Space>
+        )
       ),
       width: "1%",
     },

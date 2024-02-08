@@ -13,10 +13,15 @@ export const sidebarGenerator = (items: TUserPath[], role: string) => {
       acc.push({
         key: item.name,
         label: item.name,
-        children: item.children.map((item) => ({
-          key: item.name,
-          label: <NavLink to={`/${role}/${item.path}`}>{item.name}</NavLink>,
-        })),
+        children: item.children.map((item) => {
+          if (item.name && item.path)
+            return {
+              key: item.name,
+              label: (
+                <NavLink to={`/${role}/${item.path}`}>{item.name}</NavLink>
+              ),
+            };
+        }),
       });
     }
 
