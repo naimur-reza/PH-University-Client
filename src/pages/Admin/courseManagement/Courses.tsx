@@ -7,6 +7,7 @@ import {
   useAddFacultiesMutation,
   useGetAllCoursesQuery,
 } from "../../../redux/features/admin/courseManagement.api";
+import { FieldValues } from "react-hook-form";
 
 const Courses = () => {
   // const [params, setParams] = useState<TQueryParam[] | undefined>(undefined);
@@ -33,7 +34,7 @@ const Courses = () => {
     {
       title: "Action",
       key: "x",
-      render: (item) => {
+      render: (item: any) => {
         return <AddFacultyModal facultyInfo={item} />;
       },
     },
@@ -61,7 +62,11 @@ const Courses = () => {
   );
 };
 
-const AddFacultyModal = ({ facultyInfo }) => {
+const AddFacultyModal = ({
+  facultyInfo,
+}: {
+  facultyInfo: { key: string; title: string; code: string };
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: facultiesData } = useGetAllFacultiesQuery(undefined);
   const [addFaculties] = useAddFacultiesMutation();
@@ -73,7 +78,7 @@ const AddFacultyModal = ({ facultyInfo }) => {
     })
   );
 
-  const handleSubmit = (data) => {
+  const handleSubmit = async (data: FieldValues) => {
     const facultyData = {
       courseId: facultyInfo.key,
       data,
@@ -81,7 +86,7 @@ const AddFacultyModal = ({ facultyInfo }) => {
 
     console.log(facultyData);
 
-    addFaculties(facultyData);
+    await addFaculties(facultyData);
   };
 
   const showModal = () => {

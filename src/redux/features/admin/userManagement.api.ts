@@ -34,7 +34,10 @@ const userManagementApi = baseApi.injectEndpoints({
       }),
     }),
     getAllFaculties: builder.query({
-      query: () => "/faculties",
+      query: () => ({
+        url: "/faculties",
+        method: "GET",
+      }),
     }),
   }),
 });
