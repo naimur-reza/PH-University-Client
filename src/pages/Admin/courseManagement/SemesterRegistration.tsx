@@ -2,11 +2,12 @@ import { Button, Col, Flex } from "antd";
 import PHForm from "../../../components/form/PHForm";
 import { FieldValues } from "react-hook-form";
 import PHSelect from "../../../components/form/PHSelect";
-// import { toast } from "sonner";
+import { toast } from "sonner";
 import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement.api";
 import { semesterStatusOptions } from "../../../constants/semester";
 import PHDatePicker from "../../../components/form/PHDatePicker";
 import PHInput from "../../../components/form/PHInput";
+import { useAddRegisteredSemesterMutation } from "../../../redux/features/admin/courseManagement.api";
 
 const SemesterRegistration = () => {
   const { data: aSemesters, isLoading: sLoading } = useGetAllSemestersQuery([
@@ -16,30 +17,30 @@ const SemesterRegistration = () => {
     },
   ]);
 
+  const [addRegisterSemester, { isLoading }] =
+    useAddRegisteredSemesterMutation();
+
   const semesters = aSemesters?.data?.map((semester) => ({
     label: `${semester.name} ${semester.year}`,
     value: semester._id,
   }));
 
   const onsubmit = async (data: FieldValues) => {
-    // const name = semesters[Number(data.name) - 1].label;
     const semesterData = {
-      name,
-      code: data.name,
-      year: data.year,
-      endYear: data.year,
-      startMonth: data.startMonth,
-      endMonth: data.endMonth,
+      ...data,
+      maxCredit: Number(data.maxCredit),
+      minCredit: Number(data.minCredit),
     };
+
     console.log(semesterData);
 
-    // try {
-    //   const semester = await addSemester(semesterData).unwrap();
-    //   if (semester.success) toast.success(semester.message);
-    // } catch (error: any) {
-    //   if (error?.data.message) toast.error(error.data.message);
-    //   else toast.error("An error occurred");
-    // }
+    try {
+      const semester = await addRegisterSemester(semesterData).unwrap();
+      if (semester.success) toast.success(semester.message);
+    } catch (error: any) {
+      if (error?.data.message) toast.error(error.data.message);
+      else toast.error("An error occurred");
+    }
   };
 
   return (
@@ -62,7 +63,9 @@ const SemesterRegistration = () => {
           <PHInput type="text" label="Min credit" name="minCredit" />
           <PHInput type="text" label="Max credit" name="maxCredit" />
 
-          <Button htmlType="submit">Submit</Button>
+          <Button htmlType="submit" loading={isLoading}>
+            Submit
+          </Button>
         </PHForm>
       </Col>
     </Flex>
