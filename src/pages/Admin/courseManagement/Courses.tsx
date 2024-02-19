@@ -1,13 +1,13 @@
-import { Button, Modal, Table } from "antd";
-import { useState } from "react";
-import PHForm from "../../../components/form/PHForm";
-import PHSelect from "../../../components/form/PHSelect";
-import { useGetAllFacultiesQuery } from "../../../redux/features/admin/userManagement.api";
+import { Button, Modal, Table } from 'antd';
 import {
   useAddFacultiesMutation,
   useGetAllCoursesQuery,
-} from "../../../redux/features/admin/courseManagement.api";
-import { FieldValues } from "react-hook-form";
+} from '../../../redux/features/admin/courseManagement';
+import { useState } from 'react';
+import PHForm from '../../../components/form/PHForm';
+import PHSelect from '../../../components/form/PHSelect';
+import { useGetAcademicFacultiesQuery } from '../../../redux/features/admin/academicManagement.api';
+import { useGetAllFacultiesQuery } from '../../../redux/features/admin/userManagement.api';
 
 const Courses = () => {
   // const [params, setParams] = useState<TQueryParam[] | undefined>(undefined);
@@ -22,19 +22,19 @@ const Courses = () => {
 
   const columns = [
     {
-      title: "Title",
-      key: "title",
-      dataIndex: "title",
+      title: 'Title',
+      key: 'title',
+      dataIndex: 'title',
     },
     {
-      title: "Code",
-      key: "code",
-      dataIndex: "code",
+      title: 'Code',
+      key: 'code',
+      dataIndex: 'code',
     },
     {
-      title: "Action",
-      key: "x",
-      render: (item: any) => {
+      title: 'Action',
+      key: 'x',
+      render: (item) => {
         return <AddFacultyModal facultyInfo={item} />;
       },
     },
@@ -62,23 +62,17 @@ const Courses = () => {
   );
 };
 
-const AddFacultyModal = ({
-  facultyInfo,
-}: {
-  facultyInfo: { key: string; title: string; code: string };
-}) => {
+const AddFacultyModal = ({ facultyInfo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: facultiesData } = useGetAllFacultiesQuery(undefined);
   const [addFaculties] = useAddFacultiesMutation();
 
-  const facultiesOption = facultiesData?.data?.map(
-    (item: { _id: string; fullName: string }) => ({
-      value: item._id,
-      label: item.fullName,
-    })
-  );
+  const facultiesOption = facultiesData?.data?.map((item) => ({
+    value: item._id,
+    label: item.fullName,
+  }));
 
-  const handleSubmit = async (data: FieldValues) => {
+  const handleSubmit = (data) => {
     const facultyData = {
       courseId: facultyInfo.key,
       data,
@@ -86,7 +80,7 @@ const AddFacultyModal = ({
 
     console.log(facultyData);
 
-    await addFaculties(facultyData);
+    addFaculties(facultyData);
   };
 
   const showModal = () => {
@@ -104,7 +98,8 @@ const AddFacultyModal = ({
         title="Basic Modal"
         open={isModalOpen}
         onCancel={handleCancel}
-        footer={null}>
+        footer={null}
+      >
         <PHForm onSubmit={handleSubmit}>
           <PHSelect
             mode="multiple"

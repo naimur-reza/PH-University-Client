@@ -1,10 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
 const StudentDetails = () => {
-  const { studentId } = useParams<{ studentId: string }>();
+  const { studentId } = useParams();
+
   return (
     <div>
-      <h1> This is StudentDetails component student id is {studentId} </h1>
+      <h1> This is Student Details of {studentId} </h1>
     </div>
   );
 };

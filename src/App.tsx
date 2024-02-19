@@ -1,14 +1,12 @@
-import MainLayout from "./components/layout/MainLayout";
-import ProtectedRoute from "./components/layout/ProtectedRoute";
+import MainLayout from './components/layout/MainLayout';
+import ProtectedRoute from './components/layout/ProtectedRoute';
 
-const App = () => {
+function App() {
   return (
-    <div>
-      <ProtectedRoute>
-        <MainLayout />
-      </ProtectedRoute>
-    </div>
+    <ProtectedRoute role={undefined}>
+      <MainLayout />
+    </ProtectedRoute>
   );
-};
+}
 
 export default App;

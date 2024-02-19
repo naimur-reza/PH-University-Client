@@ -1,17 +1,17 @@
-import { FieldValues, SubmitHandler } from "react-hook-form";
-import PHForm from "../../../components/form/PHForm";
-import { Button, Col, Flex } from "antd";
-import PHSelect from "../../../components/form/PHSelect";
-import { toast } from "sonner";
-import PHInput from "../../../components/form/PHInput";
+import { FieldValues, SubmitHandler } from 'react-hook-form';
+import PHForm from '../../../components/form/PHForm';
+import { Button, Col, Flex } from 'antd';
+import PHSelect from '../../../components/form/PHSelect';
+import { toast } from 'sonner';
+import PHInput from '../../../components/form/PHInput';
 import {
   useAddCourseMutation,
   useGetAllCoursesQuery,
-} from "../../../redux/features/admin/courseManagement.api";
-import { TResponse } from "../../../types";
+} from '../../../redux/features/admin/courseManagement';
+import { TResponse } from '../../../types';
 
 const CreateCourse = () => {
-  const [createCourse, { isLoading }] = useAddCourseMutation();
+  const [createCourse] = useAddCourseMutation();
   const { data: courses } = useGetAllCoursesQuery(undefined);
 
   const preRequisiteCoursesOptions = courses?.data?.map((item) => ({
@@ -19,10 +19,8 @@ const CreateCourse = () => {
     label: item.title,
   }));
 
-  console.log(courses);
-
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    const toastId = toast.loading("Creating...");
+    const toastId = toast.loading('Creating...');
 
     const courseData = {
       ...data,
@@ -30,12 +28,10 @@ const CreateCourse = () => {
       credits: Number(data.credits),
       isDeleted: false,
       preRequisiteCourses: data.preRequisiteCourses
-        ? data?.preRequisiteCourses?.map(
-            (item: { value: string; label: string }) => ({
-              course: item,
-              isDeleted: false,
-            })
-          )
+        ? data.preRequisiteCourses?.map((item) => ({
+            course: item,
+            isDeleted: false,
+          }))
         : [],
     };
 
@@ -47,10 +43,10 @@ const CreateCourse = () => {
       if (res.error) {
         toast.error(res.error.data.message, { id: toastId });
       } else {
-        toast.success("Semester created", { id: toastId });
+        toast.success('Semester created', { id: toastId });
       }
     } catch (err) {
-      toast.error("Something went wrong", { id: toastId });
+      toast.error('Something went wrong', { id: toastId });
     }
   };
 
@@ -68,9 +64,7 @@ const CreateCourse = () => {
             name="preRequisiteCourses"
             label="preRequisiteCourses"
           />
-          <Button htmlType="submit" loading={isLoading}>
-            Submit
-          </Button>
+          <Button htmlType="submit">Submit</Button>
         </PHForm>
       </Col>
     </Flex>

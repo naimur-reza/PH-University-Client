@@ -1,71 +1,72 @@
-import { Button, Col, Flex } from "antd";
-import PHForm from "../../../components/form/PHForm";
-import { FieldValues } from "react-hook-form";
-import PHSelect from "../../../components/form/PHSelect";
-import { toast } from "sonner";
-import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement.api";
-import { semesterStatusOptions } from "../../../constants/semester";
-import PHDatePicker from "../../../components/form/PHDatePicker";
-import PHInput from "../../../components/form/PHInput";
-import { useAddRegisteredSemesterMutation } from "../../../redux/features/admin/courseManagement.api";
+import { FieldValues, SubmitHandler } from 'react-hook-form';
+import PHForm from '../../../components/form/PHForm';
+import { Button, Col, Flex } from 'antd';
+import PHSelect from '../../../components/form/PHSelect';
+import { semesterStatusOptions } from '../../../constants/semester';
+
+import { toast } from 'sonner';
+import { useGetAllSemestersQuery } from '../../../redux/features/admin/academicManagement.api';
+import PHDatePicker from '../../../components/form/PHDatePicker';
+import PHInput from '../../../components/form/PHInput';
+import { useAddRegisteredSemesterMutation } from '../../../redux/features/admin/courseManagement';
+import { TResponse } from '../../../types';
 
 const SemesterRegistration = () => {
-  const { data: aSemesters, isLoading: sLoading } = useGetAllSemestersQuery([
-    {
-      name: "sort",
-      value: "year",
-    },
+  const [addSemester] = useAddRegisteredSemesterMutation();
+  const { data: academicSemester } = useGetAllSemestersQuery([
+    { name: 'sort', value: 'year' },
   ]);
 
-  const [addRegisterSemester, { isLoading }] =
-    useAddRegisteredSemesterMutation();
-
-  const semesters = aSemesters?.data?.map((semester) => ({
-    label: `${semester.name} ${semester.year}`,
-    value: semester._id,
+  const academicSemesterOptions = academicSemester?.data?.map((item) => ({
+    value: item._id,
+    label: `${item.name} ${item.year}`,
   }));
 
-  const onsubmit = async (data: FieldValues) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const toastId = toast.loading('Creating...');
+
     const semesterData = {
       ...data,
-      maxCredit: Number(data.maxCredit),
       minCredit: Number(data.minCredit),
+      maxCredit: Number(data.maxCredit),
     };
 
     console.log(semesterData);
 
     try {
-      const semester = await addRegisterSemester(semesterData).unwrap();
-      if (semester.success) toast.success(semester.message);
-    } catch (error: any) {
-      if (error?.data.message) toast.error(error.data.message);
-      else toast.error("An error occurred");
+      const res = (await addSemester(semesterData)) as TResponse<any>;
+      console.log(res);
+      if (res.error) {
+        toast.error(res.error.data.message, { id: toastId });
+      } else {
+        toast.success('Semester created', { id: toastId });
+      }
+    } catch (err) {
+      toast.error('Something went wrong', { id: toastId });
     }
   };
 
   return (
     <Flex justify="center" align="center">
-      <Col span={7}>
-        <PHForm onSubmit={onsubmit}>
+      <Col span={6}>
+        <PHForm onSubmit={onSubmit}>
           <PHSelect
-            label="Academic semester"
+            label="Academic Semester"
             name="academicSemester"
-            options={semesters}
-            disabled={sLoading}
+            options={academicSemesterOptions}
           />
+
           <PHSelect
-            label="Status"
             name="status"
+            label="Status"
             options={semesterStatusOptions}
           />
-          <PHDatePicker label="Start-date" name="startDate" />
-          <PHDatePicker label="End-date" name="endDate" />
-          <PHInput type="text" label="Min credit" name="minCredit" />
-          <PHInput type="text" label="Max credit" name="maxCredit" />
+          <PHDatePicker name="startDate" label="Start Date" />
+          <PHDatePicker name="endDate" label="End Date" />
+          <PHInput type="text" name="minCredit" label="Min Credit" />
+          <PHInput type="text" name="maxCredit" label="Max Credit" />
 
-          <Button htmlType="submit" loading={isLoading}>
-            Submit
-          </Button>
+          <Button htmlType="submit">Submit</Button>
         </PHForm>
       </Col>
     </Flex>

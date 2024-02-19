@@ -1,49 +1,71 @@
-import { adminPaths } from "../../routes/admin.routes";
-import { sidebarGenerator } from "../../utils/sidebarGenerator";
-import { studentPaths } from "../../routes/student.routes";
-import { facultyPaths } from "../../routes/faculty.routes";
-import Sider from "antd/es/layout/Sider";
-import { Menu } from "antd";
-import { useAppSelector } from "../../redux/hooks";
-import { selectCurrentUser } from "../../redux/features/auth/authSlice";
+import { Layout, Menu } from 'antd';
+import { sidebarItemsGenerator } from '../../utils/sidebarItemsGenerator';
+import { adminPaths } from '../../routes/admin.routes';
+import { facultyPaths } from '../../routes/faculty.routes';
+import { studentPaths } from '../../routes/student.routes';
+import { useAppSelector } from '../../redux/hooks';
+import {
+  TUser,
+  selectCurrentUser,
+  useCurrentToken,
+} from '../../redux/features/auth/authSlice';
+import { verifyToken } from '../../utils/verifyToken';
+
+const { Sider } = Layout;
+
+const userRole = {
+  ADMIN: 'admin',
+  FACULTY: 'faculty',
+  STUDENT: 'student',
+};
 
 const Sidebar = () => {
-  const user = useAppSelector(selectCurrentUser);
+  const token = useAppSelector(useCurrentToken);
 
-  const USER_ROLE = {
-    STUDENT: "student",
-    FACULTY: "faculty",
-    ADMIN: "admin",
-  };
+  let user;
+
+  if (token) {
+    user = verifyToken(token);
+  }
 
   let sidebarItems;
 
-  switch (user?.role) {
-    case USER_ROLE.ADMIN:
-      sidebarItems = sidebarGenerator(adminPaths, USER_ROLE.ADMIN);
+  switch ((user as TUser)!.role) {
+    case userRole.ADMIN:
+      sidebarItems = sidebarItemsGenerator(adminPaths, userRole.ADMIN);
       break;
-    case USER_ROLE.FACULTY:
-      sidebarItems = sidebarGenerator(facultyPaths, USER_ROLE.FACULTY);
+    case userRole.FACULTY:
+      sidebarItems = sidebarItemsGenerator(facultyPaths, userRole.FACULTY);
       break;
-    case USER_ROLE.STUDENT:
-      sidebarItems = sidebarGenerator(studentPaths, USER_ROLE.STUDENT);
+    case userRole.STUDENT:
+      sidebarItems = sidebarItemsGenerator(studentPaths, userRole.STUDENT);
       break;
 
     default:
       break;
   }
+
   return (
     <Sider
-      style={{ height: "100vh", position: "sticky", top: "0", left: "0" }}
       breakpoint="lg"
-      collapsedWidth="0">
-      <div className=" text-white font-semibold text-xl flex items-center justify-center h-14">
-        PH-University
+      collapsedWidth="0"
+      style={{ height: '100vh', position: 'sticky', top: '0', left: '0' }}
+    >
+      <div
+        style={{
+          color: 'white',
+          height: '4rem',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <h1>PH Uni</h1>
       </div>
       <Menu
         theme="dark"
         mode="inline"
-        // defaultSelectedKeys={["1"]}
+        defaultSelectedKeys={['4']}
         items={sidebarItems}
       />
     </Sider>
